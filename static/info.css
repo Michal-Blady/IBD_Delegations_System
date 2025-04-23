@@ -1,0 +1,87 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
+}
+
+.info {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.info p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+a {
+    text-decoration: none;
+    color: blue;
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+}
+
+a:hover {
+    color: darkblue;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 5px;
+    background-color: #f4f4f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.checkbox-group:hover {
+    background-color: #e0e0e0;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+.checkbox-group label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s ease;
+}
+
+.checkbox-group:hover label {
+    color: #007bff;
+}
+
+
+
+#vehicle_list {
+    margin-bottom: 30px;
+}
+
+#users {
+    margin-top: 30px;
+}
+
+.checkbox-group {
+    margin-bottom: 10px;
+}

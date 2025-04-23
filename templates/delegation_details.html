@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Szczegóły Delegacji</h1>
+<p><strong>Miejsce:</strong> {{ delegation['miejsce'] }}</p>
+<p><strong>Data rozpoczęcia:</strong> {{ delegation['data_rozpoczecia'] }}</p>
+<p><strong>Data zakończenia:</strong> {{ delegation['data_zakonczenia'] }}</p>
+<p><strong>Transport:</strong> {{ delegation['transport'] }}</p>
+<p><strong>Opis:</strong> {{ delegation['opis'] }}</p>
+
+<h3>Użytkownicy:</h3>
+<ul>
+    {% for user in users %}
+        <li>{{ user['login'] }} - {{ user['email'] }}</li>
+    {% endfor %}
+</ul>
+
+<h3>Pojazdy:</h3>
+<ul>
+    {% for vehicle in vehicles %}
+        <li>{{ vehicle['nazwa'] }} ({{ vehicle['numer_rejestracyjny'] }})</li>
+    {% endfor %}
+</ul>
+
+<h3>Zakwaterowanie:</h3>
+<ul>
+    {% for accommodation in accommodations %}
+        <li>{{ accommodation['miejscowosc'] }}, {{ accommodation['ulica'] }}, {{ accommodation['nr_budynku'] }}, {{ accommodation['nr_mieszkania'] }} - {{ accommodation['data_od'] }} do {{ accommodation['data_do'] }} - Typ zakwaterowania: {{ accommodation['typ_zakwaterowania']  }} - Liczba osób: {{ accommodation['liczba_osob']  }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

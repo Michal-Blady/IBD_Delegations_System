@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accommodations Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+{% extends 'base.html' %}
+{% block content %}
+<h1>Lista zakwaterowań</h1>
+{% if session['role'] == 'manager' or 'admin' %}
+<!--<a href="{{ url_for('add_accommodation') }}" class="add-button">Dodaj zakwaterowanie</a>-->
+{% endif %}
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Miejscowość</th>
+            <th>Ulica</th>
+            <th>Numer budynku</th>
+            <th>Numer mieszkania</th>
+            <th>Data od</th>
+            <th>Data do</th>
+            <th>Typ zakwaterowania</th>
+            <th>Liczba osób</th>
+            {% if session['role'] == 'manager' or 'admin'%}
+            <th>Akcje</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for accommodation in accommodations %}
+        <tr>
+            <td>{{ accommodation["id_zakwaterowanie"] }}</td>
+            <td>{{ accommodation["miejscowosc"] }}</td>
+            <td>{{ accommodation["ulica"] }}</td>
+            <td>{{ accommodation["nr_budynku"] }}</td>
+            <td>{{ accommodation["nr_mieszkania"] }}</td>
+            <td>{{ accommodation["data_od"] }}</td>
+            <td>{{ accommodation["data_do"] }}</td>
+            <td>{{ accommodation["typ_zakwaterowania"] }}</td>
+            <td>{{ accommodation["liczba_osob"] }}</td>
+            {% if session['role'] == 'manager' or 'admin'%}
+            <td>
+                <!--<a href="{{ url_for('edit_accommodation', accommodation_id=accommodation['id_zakwaterowanie']) }}" class="edit-button">Edytuj</a>-->
+                <a href="{{ url_for('delete_accommodation', accommodation_id=accommodation['id_zakwaterowanie']) }}" class="delete-button">Usuń</a>
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+</html>

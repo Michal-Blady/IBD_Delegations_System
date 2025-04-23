@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj pojazd</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+{% extends 'base.html' %}
+{% block content %}
+<body>
+    <h1>Dodaj pojazd</h1>
+    <form action="{{ url_for('add_vehicle') }}" method="POST">
+        <label for="name">Nazwa:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="reg_number">Numer rejestracyjny:</label>
+        <input type="text" id="reg_number" name="reg_number" required>
+
+        <label for="vehicle_type">Typ pojazdu:</label>
+        <select id="vehicle_type" name="vehicle_type" required>
+            <option value="osobowy">Osobowy</option>
+            <option value="dostawczy">Dostawczy</option>
+            <option value="inne">Inny</option>
+        </select>
+
+        <label for="available">Dostępność:</label>
+        <select id="available" name="available" required>
+            <option value=1>Tak</option>
+            <option value=0>Nie</option>
+        </select>
+
+        <button type="submit">Dodaj</button>
+    </form>
+</body>
+{% endblock %}
+</html>

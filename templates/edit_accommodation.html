@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Accommodation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+{% extends 'base.html' %}
+{% block content %}
+<h1>Edytuj zakwaterowanie</h1>
+<form action="{{ url_for('edit_accommodation', accommodation_id=accommodation['id_zakwaterowanie']) }}" method="POST">
+    <label for="city">Miejscowość:</label>
+    <input type="text" id="city" name="city" value="{{ accommodation['miejscowosc'] }}" required>
+
+    <label for="street">Ulica:</label>
+    <input type="text" id="street" name="street" value="{{ accommodation['ulica'] }}" required>
+
+    <label for="address">Numer budynku:</label>
+    <input type="number" id="nr_budynku" name="nr_budynku" value="{{ accommodation['nr_budynku'] }}" required>
+
+    <label for="address">Numer mieszkania:</label>
+    <input type="number" id="nr_mieszkania" name="nr_mieszkania" value="{{ accommodation['nr_mieszkania'] }}" required>
+
+    <label for="start_date">Data od:</label>
+    <input type="date" id="start_date" name="start_date" value="{{ accommodation['data_od'] }}" required>
+
+    <label for="end_date">Data do:</label>
+    <input type="date" id="end_date" name="end_date" value="{{ accommodation['data_do'] }}" required>
+
+    <label for="accommodation_type">Typ zakwaterowania:</label>
+        <select id="accommodation_type" name="accommodation_type" required>
+            <option value="apartament" {% if accommodation['typ_zakwaterowania'] == 'apartament' %}selected{% endif %}>Apartament</option>
+            <option value="hotel" {% if accommodation['typ_zakwaterowania'] == 'hotel' %}selected{% endif %}>Hotel</option>
+            <option value="inne" {% if accommodation['typ_zakwaterowania'] == 'inne' %}selected{% endif %}>Inne</option>
+        </select>
+
+    <label for="people_count">Liczba osób:</label>
+    <input type="number" id="people_count" name="people_count" value="{{ accommodation['liczba_osob'] }}" min="1" required>
+
+    <button type="submit">Zapisz zmiany</button>
+</form>
+{% endblock %}
+
+</html>

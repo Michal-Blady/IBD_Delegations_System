@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj użytkownika</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='info.css') }}">
+</head>
+{% extends 'base.html' %}
+{% block content %}
+<body>
+    <h1>Dodaj użytkownika</h1>
+    <form action="{{ url_for('add_user') }}" method="POST">
+        <label for="login">Login:</label>
+        <input type="text" id="login" name="login" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Hasło:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="role">Rola:</label>
+        <select id="role" name="role" required>
+            <option value="admin">Administrator</option>
+            <option value="manager">Menedżer</option>
+            <option value="pracownik">Pracownik</option>
+        </select>
+
+        <label for="first_name">Imię:</label>
+        <input type="text" id="first_name" name="first_name" required>
+
+        <label for="last_name">Nazwisko:</label>
+        <input type="text" id="last_name" name="last_name" required>
+
+        <label for="phone">Numer telefonu:</label>
+        <input type="text" id="phone" name="phone" required>
+
+        <button type="submit">Dodaj</button>
+    </form>
+</body>
+{% endblock %}
+</html>

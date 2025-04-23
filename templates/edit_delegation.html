@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edytuj Delegację</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='info.css') }}">
+
+</head>
+{% extends 'base.html' %}
+{% block content %}
+<h1>Edytuj Delegację</h1>
+<form action="{{ url_for('edit_delegation', delegation_id=delegation['id_delegacja']) }}" method="POST">
+    <label for="place">Miejsce:</label>
+    <input type="text" id="place" name="place" value="{{ delegation['miejsce'] }}" required>
+
+    <label for="start_date">Data rozpoczęcia:</label>
+    <input type="date" id="start_date" name="start_date" value="{{ delegation['data_rozpoczecia'] }}" required>
+
+    <label for="end_date">Data zakończenia:</label>
+    <input type="date" id="end_date" name="end_date" value="{{ delegation['data_zakonczenia'] }}" required>
+
+    <label for="description">Opis:</label>
+    <input type="text" id="description" name="description" value="{{ delegation['opis'] }}" required>
+
+    <label for="transport">Transport:</label>
+    <select id="transport" name="transport" required onchange="toggleVehicles(this.value)">
+        <option value="samochód" {% if delegation['transport'] == 'samochód' %}selected{% endif %}>Samochód</option>
+        <option value="pociąg" {% if delegation['transport'] == 'pociąg' %}selected{% endif %}>Pociąg</option>
+        <option value="samolot" {% if delegation['transport'] == 'samolot' %}selected{% endif %}>Samolot</option>
+        <option value="inne" {% if delegation['transport'] == 'inne' %}selected{% endif %}>Inne</option>
+    </select>
+
+    <div id="vehicle_list" style="display:none;">
+        <h3>Wybierz pojazdy służbowe:</h3>
+        {% for vehicle in vehicles %}
+            <div class="checkbox-group">
+                <input type="checkbox" id="vehicle_{{ vehicle['id_pojazd'] }}" name="vehicles[]" value="{{ vehicle['id_pojazd'] }}" {% if vehicle['id_pojazd'] in assigned_vehicles %}checked{% endif %}>
+                <label for="vehicle_{{ vehicle['id_pojazd'] }}">{{ vehicle['nazwa'] }} ({{ vehicle['numer_rejestracyjny'] }})</label>
+            </div>
+            <div class="vehicle-users">
+                <label>Użytkownicy w pojeździe:</label>
+                {% for user in users %}
+                    <div class="checkbox-group">
+                        <input type="checkbox" name="vehicle_users_{{ vehicle['id_pojazd'] }}[]" value="{{ user['id_uzytkownika'] }}">
+                        <label>{{ user['login'] }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+            <br>
+        {% endfor %}
+    </div>
+
+    <h3>Przypisz użytkowników do delegacji:</h3>
+    <div id="users">
+        {% for user in users %}
+            <div class="checkbox-group">
+                <input type="checkbox" id="user_{{ user['id_uzytkownika'] }}" name="users[]" value="{{ user['id_uzytkownika'] }}" {% if user['id_uzytkownika'] in assigned_users %}checked{% endif %}>
+                <label for="user_{{ user['id_uzytkownika'] }}">{{ user['login'] }}</label>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h3>Zakwaterowanie:</h3>
+    <div id="accommodations">
+        {% for accommodation in accommodations %}
+            <div class="accommodation">
+                <input type="text" name="accommodation_city[]" value="{{ accommodation['miejscowosc'] }}" placeholder="Miejscowość" required>
+                <input type="text" name="accommodation_street[]" value="{{ accommodation['ulica'] }}" placeholder="Ulica" required>
+                <input type="number" name="accommodation_building[]" value="{{ accommodation['nr_budynku'] }}" placeholder="Nr budynku" required>
+                <input type="number" name="accommodation_place[]" value="{{ accommodation['nr_mieszkania'] }}" placeholder="Nr mieszkania" required>
+                <input type="date" name="accommodation_start[]" value="{{ accommodation['data_od'] }}" required>
+                <input type="date" name="accommodation_end[]" value="{{ accommodation['data_do'] }}" required>
+                <input type="number" name="accommodation_people[]" value="{{ accommodation['liczba_osob'] }}" placeholder="Liczba osób" required>
+
+                <h5>Użytkownicy przypisani do zakwaterowania:</h5>
+                {% for user in users %}
+                    <div class="checkbox-group">
+                        <input type="checkbox" name="accommodation_users_{{ loop.index }}[]" value="{{ user['id_uzytkownika'] }}" {% if user['id_uzytkownika'] in accommodation['assigned_users'] %}checked{% endif %}>
+                        <label>{{ user['login'] }}</label>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button type="button" onclick="addAccommodation()">Dodaj zakwaterowanie</button>
+    </div>
+
+    <button type="submit">Zapisz zmiany</button>
+</form>
+
+<script>
+function toggleVehicles(transport) {
+    document.getElementById('vehicle_list').style.display = (transport === 'samochód') ? 'block' : 'none';
+}
+
+function addAccommodation() {
+    const container = document.getElementById('accommodations');
+    const accommodationId = Date.now();
+    const newAccommodation = `
+        <div class="accommodation" id="accommodation_${accommodationId}">
+            <h4>Zakwaterowanie</h4>
+            <input type="text" name="accommodation_city[]" placeholder="Miejscowość" required>
+            <input type="text" name="accommodation_street[]" placeholder="Ulica" required>
+            <input type="number" name="accommodation_building[]" placeholder="Nr budynku" required>
+            <input type="number" name="accommodation_place[]" placeholder="Nr mieszkania" required>
+            <input type="date" name="accommodation_start[]" required>
+            <input type="date" name="accommodation_end[]" required>
+            <input type="number" name="accommodation_people[]" placeholder="Liczba osób" required>
+
+            <h5>Użytkownicy przypisani do zakwaterowania:</h5>
+            {% for user in users %}
+                <div class="checkbox-group">
+                    <input type="checkbox" name="accommodation_users_${accommodationId}[]" value="{{ user['id_uzytkownika'] }}">
+                    <label>{{ user['login'] }}</label>
+                </div>
+            {% endfor %}
+            <button type="button" onclick="removeAccommodation(${accommodationId})">Usuń zakwaterowanie</button>
+        </div>`;
+    container.insertAdjacentHTML('beforeend', newAccommodation);
+}
+
+function removeAccommodation(accommodationId) {
+    const element = document.getElementById(`accommodation_${accommodationId}`);
+    if (element) element.remove();
+}
+</script>
+{% endblock %}

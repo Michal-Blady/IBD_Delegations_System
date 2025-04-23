@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function deleteDelegation(delegationId) {
+            if (confirm("Czy na pewno chcesz usunąć tę delegację?")) {
+                fetch(`/delete_delegation/${delegationId}`, { method: 'POST' })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert("Wystąpił błąd podczas usuwania delegacji.");
+                        }
+                    });
+            }
+        }
+    </script>
+</head>
+    {% extends 'base.html' %}
+    {% block content %}
+        <body>
+        {% if session['role'] in ['manager', 'admin'] %}
+            <h1>Wszystkie delegacje</h1>
+        {% else %}
+            <h1>Twoje delegacje</h1>
+        {% endif %}
+            <div class="actions">
+                <a href="{{ url_for('add_delegation') }}" class="button">Dodaj Delegację</a>
+            </div>
+
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Miejsce</th>
+                        <th>Od</th>
+                        <th>Do</th>
+                        <th>Status</th>
+                        <th>Opcje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for delegation in delegations %}
+                    <tr>
+                         {% if delegation['status'] != 'archiwum' %}
+                            <td>{{ delegation["id_delegacja"] }}</td>
+                            <td>{{ delegation["miejsce"] }}</td>
+                            <td>{{ delegation["data_rozpoczecia"] }}</td>
+                            <td>{{ delegation["data_zakonczenia"] }}</td>
+                            <td>{{ delegation["status"] }}</td>
+                            <td>
+                                <a href="{{ url_for('delegation_details', delegation_id=delegation['id_delegacja']) }}">Szczegóły</a>
+
+                                {% if session['role'] in ['manager', 'admin'] %}
+                                    <a href="{{ url_for('edit_delegation', delegation_id=delegation['id_delegacja']) }}">Edytuj</a>
+                                    <a href="{{ url_for('delete_delegation', delegation_id=delegation['id_delegacja']) }}">Usuń</a>
+                                    {% if delegation['status'] not in ['zatwierdzone', 'archiwum'] %}
+                                    <a href="{{ url_for('approve_delegation', delegation_id=delegation['id_delegacja']) }}">Zatwierdź</a>
+                                    {% endif %}
+                                    <a href="{{ url_for('archive_delegation', delegation_id=delegation['id_delegacja']) }}">Archiwizuj</a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </body>
+    {% endblock %}
+</html>

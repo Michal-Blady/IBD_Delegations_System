@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Strona{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <nav>
+        <a href="{{ url_for('dashboard') }}">Główna</a>
+        {% if session['role'] in ['manager', 'admin'] %}
+            <a href="{{ url_for('users') }}">Użytkownicy</a>
+            <a href="{{ url_for('vehicles') }}">Pojazdy służbowe</a>
+            <a href="{{ url_for('accommodations') }}">Zakwaterowanie</a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}">Wyloguj</a>
+        <div class="user-info">
+            <span>{{ session['username'] }} | {{ session['role'] }}</span>
+        </div>
+    </nav>
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

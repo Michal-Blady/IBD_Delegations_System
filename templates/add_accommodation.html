@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Accommodation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+{% extends 'base.html' %}
+{% block content %}
+<h1>Dodaj zakwaterowanie</h1>
+<form action="{{ url_for('add_accommodation') }}" method="POST">
+    <label for="city">Miejscowość:</label>
+    <input type="text" id="city" name="city" required>
+
+    <label for="street">Ulica:</label>
+    <input type="text" id="street" name="street" required>
+
+    <label for="nr_budynku">Numer budynku:</label>
+    <input type="number" id="nr_budynku" name="nr_budynku" required>
+
+    <label for="nr_mieszkania">Numer mieszkania:</label>
+    <input type="number" id="nr_mieszkania" name="nr_mieszkania" required>
+
+    <label for="start_date">Data od:</label>
+    <input type="date" id="start_date" name="start_date" required>
+
+    <label for="end_date">Data do:</label>
+    <input type="date" id="end_date" name="end_date" required>
+
+    <label for="accommodation_type">Typ zakwaterowania:</label>
+        <select id="accommodation_type" name="accommodation_type" required>
+            <option value="hotel">Hotel</option>
+            <option value="apartament">Apartament</option>
+            <option value="inne">Inne</option>
+        </select>
+
+    <label for="people_count">Liczba osób:</label>
+    <input type="number" id="people_count" name="people_count" min="1" required>
+
+    <button type="submit">Dodaj</button>
+</form>
+{% endblock %}
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edytuj użytkownika</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='info.css') }}">
+</head>
+{% extends 'base.html' %}
+{% block content %}
+<body>
+    <h1>Edytuj użytkownika</h1>
+    <form action="{{ url_for('edit_user', user_id=user['id_uzytkownika']) }}" method="POST">
+        <label for="login">Login:</label>
+        <input type="text" id="login" name="login" value="{{ user['login'] }}" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ user['email'] }}" required>
+
+        <label for="password">Hasło:</label>
+        <input type="password" id="password" name="password" value="{{ user['haslo'] }}" required>
+
+        <label for="role">Rola:</label>
+        <select id="role" name="role" required>
+            <option value="admin" {% if user['rola'] == 'admin' %}selected{% endif %}>Administrator</option>
+            <option value="manager" {% if user['rola'] == 'manager' %}selected{% endif %}>Menedżer</option>
+            <option value="worker" {% if user['rola'] == 'pracownik' %}selected{% endif %}>Pracownik</option>
+        </select>
+
+        <label for="first_name">Imię:</label>
+        <input type="text" id="first_name" name="first_name" value="{{ user['imie'] }}" required>
+
+        <label for="last_name">Nazwisko:</label>
+        <input type="text" id="last_name" name="last_name" value="{{ user['nazwisko'] }}" required>
+
+        <label for="phone">Numer telefonu:</label>
+        <input type="text" id="phone" name="phone" value="{{ user['nr_tel'] }}" required>
+
+        <button type="submit">Zapisz zmiany</button>
+    </form>
+</body>
+{% endblock %}
+</html>
